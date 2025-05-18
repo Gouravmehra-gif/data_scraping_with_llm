@@ -2,6 +2,12 @@ from playwright.sync_api import sync_playwright
 import time
 import re
 
+
+email_pattern = r'[\w\.-]+@[\w\.-]+\.\w+'
+phone_pattern = r'\b\d{3}[-.\s]??\d{3}[-.\s]??\d{4}\b'
+name_pattern = r'[A-Z][a-z]+\s[A-Z][a-z]+'
+
+
 print("_________________________________Loading the model_________________________________")
 start_time = time.time()
 from model import TextGenModel
@@ -99,6 +105,16 @@ with sync_playwright() as p:
         print(f"[{idx+1}] Generated CSS selector for author: {selector}")
         quote_text_element = parent_element.query_selector(".text")
         quote_text = quote_text_element.inner_text() if quote_text_element else "Quote not found"
+
+        print("_________________Data Anonymization in Progress_________________")
+        try:
+            anonymized_email = re.sub(email_pattern, '[EMAIL]', quote_text)
+            anonymized_phone = re.sub(phone_pattern, '[PHONE]', quote_text)
+            anonymized_name = re.sub(name_pattern, '[NAME]', quote_text)
+        except Exception as e:
+            pass
+        print("_________________Data Anonymization completed_________________")
+
         Quotes.append(quote_text)
         try:
             author_element = parent_element.query_selector(selector)

@@ -2,6 +2,10 @@ from playwright.sync_api import sync_playwright
 import time
 import re
 
+email_pattern = r'[\w\.-]+@[\w\.-]+\.\w+'
+phone_pattern = r'\b\d{3}[-.\s]??\d{3}[-.\s]??\d{4}\b'
+name_pattern = r'[A-Z][a-z]+\s[A-Z][a-z]+'
+
 # ---------------- Model loading ----------------
 print("_________________________________Loading the model_________________________________")
 start_time = time.time()
@@ -103,6 +107,16 @@ with sync_playwright() as p:
         try:
             news_element = parent_element.query_selector(selector)
             news_text = news_element.inner_text()
+
+            print("_________________Data Anonymization in Progress_________________")
+            try:
+                anonymized_email = re.sub(email_pattern, '[EMAIL]', news_text)
+                anonymized_phone = re.sub(phone_pattern, '[PHONE]', news_text)
+                anonymized_name = re.sub(name_pattern, '[NAME]', news_text)
+            except Exception as e:
+                pass
+            print("_________________Data Anonymization completed_________________")
+
             news_titles.append(news_text)
             print(f"{i}: {news_text}\n")
         except Exception as e:
