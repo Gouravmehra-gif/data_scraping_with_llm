@@ -1,2 +1,2 @@
-# data_scraping_with_llm
-This repo contains code to scrape dynamic website with the help of LLM's
+# data-scraping-with-Langchain
+This repo contains code that demonstrate how we can introduce AI in our Data Scraping scripts.
